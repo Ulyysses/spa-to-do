@@ -1,37 +1,27 @@
 import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { useDispatch } from 'react-redux';
-import { addTask } from "../../services/actions/actions";
+import { addTask, deleteTask } from "../../services/actions/actions";
+import { ITask, Priority, Status } from "../../types";
 
 interface IModal {
   active: boolean;
   setActive: (newValue: boolean) => void;
+  task: ITask;
+  editTask: () => void;
 }
 
-const Modal = ({ active, setActive }: IModal) => {
+const Modal = ({active, setActive, task, editTask}: IModal) => {
 
   const [value, setValue] = useState({
-    summary: "",
-    priority: "",
-    description: "",
-    commecement: "",
-    days: "",
-    completion: "",
-    files: "",
-    comments: "",
+    summary: task.summary ?? "",
+    subTasks: task.subTasks ?? [], 
+    priority: task.priority ?? Priority.Low,
+    description: task.description ?? "",
+    startDate: task.startDate ?? "",
+    endDate: task.endDate ?? "",
+    status: task.status ?? Status.Queue,
+    files: task.files ?? [],
   });
-
-  const [disabled, setDisabled] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const editTask = () => {
-    setDisabled(false);
-  };
-
-  const saveTask = () => {
-    setDisabled(true);
-    dispatch(addTask(value))
-  };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue({
@@ -65,7 +55,7 @@ const Modal = ({ active, setActive }: IModal) => {
             name={"summary"}
             placeholder="Summary"
             type="text"
-            disabled={disabled}
+            disabled
           />
         </label>
         <label>
@@ -76,59 +66,48 @@ const Modal = ({ active, setActive }: IModal) => {
             name={"description"}
             placeholder="Description"
             type="text"
-            disabled={disabled}
+            disabled
           />
         </label>
         <label>
           Commecement date:
           <input
             onChange={onChange}
-            value={value.commecement}
+            value={value.startDate}
             name={"commecement"}
             placeholder="Commecement date"
             type="date"
-            disabled={disabled}
-          />
-        </label>
-        <label>
-          At work:
-          <input
-            onChange={onChange}
-            value={value.days}
-            name={"days"}
-            placeholder="At work"
-            type="text"
-            disabled={disabled}
+            disabled
           />
         </label>
         <label>
           Сompletion date:
           <input
             onChange={onChange}
-            value={value.completion}
+            value={value.endDate}
             name={"Сompletion"}
             placeholder="Сompletion date"
             type="date"
-            disabled={disabled}
+            disabled
           />
         </label>
         <p>
           Priority:
           <label>
-            <input type="radio" name="myRadio" value="High" />High
+            <input type="radio" name="priority" value="Low" onChange={onChange}/>Low
           </label>
           <label>
-            <input type="radio" name="myRadio" value="Medium" />Medium
+            <input type="radio" name="priority" value="Medium" onChange={onChange}/>Medium
           </label>
           <label>
-            <input type="radio" name="myRadio" value="Low" />Low
+            <input type="radio" name="priority" value="High" onChange={onChange}/>High
           </label>
         </p>
-        <label>
+        <label> 
           <input
             name={"file"}
             type="file"
-            disabled={disabled}
+            disabled
           />
         </label>
         {/* <p>
@@ -146,7 +125,8 @@ const Modal = ({ active, setActive }: IModal) => {
         <button>+</button>
         <p>Comments:</p>
         <button onClick={editTask}>Edit</button>
-        <button onClick={saveTask}>Save</button>
+        {/* {task.id && <button onClick={saveTask}>Save</button>}
+        {task.id && <button onClick={removeTask}>Delete</button>} */}
       </div>
       <button onClick={closeModal}>close</button>
     </dialog>

@@ -1,13 +1,13 @@
 export interface ITask {
-  number: number;
+  id: string;
   summary: string;
-  subTasks: number[];
+  subTasks?: number[];
   priority: Priority;
   description: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   status: Status;
-  files: string[];
+  files?: string[];
   project: string;
 }
 
@@ -23,4 +23,4 @@ export enum Status {
   Done,
 }
 
-export type TForm = Omit<ITask, 'project' | 'number'>
+export type TForm = Omit<ITask, 'project' | 'id'>
