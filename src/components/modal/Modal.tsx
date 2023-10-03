@@ -1,38 +1,48 @@
 import { useState, useRef, useEffect, ChangeEvent } from "react";
-import { useDispatch } from 'react-redux';
 import { addTask, deleteTask } from "../../services/actions/actions";
-import { ITask, Priority, Status } from "../../types";
+import { ITask, Priority, Status, TForm } from "../../types";
 
 interface IModal {
   active: boolean;
-  setActive: (newValue: boolean) => void;
-  task: ITask;
-  editTask: () => void;
+  task?: ITask;
+  editTask?: (value: TForm, id: string) => void;
+  removeTask?: (value: string) => void;
+  saveTask?: (value: TForm) => void;
+  onClose: () => void;
 }
 
-const Modal = ({active, setActive, task, editTask}: IModal) => {
+const Modal = ({ active, task, editTask, removeTask, saveTask, onClose }: IModal) => {
 
-  const [value, setValue] = useState({
-    summary: task.summary ?? "",
-    subTasks: task.subTasks ?? [], 
-    priority: task.priority ?? Priority.Low,
-    description: task.description ?? "",
-    startDate: task.startDate ?? "",
-    endDate: task.endDate ?? "",
-    status: task.status ?? Status.Queue,
-    files: task.files ?? [],
-  });
+  const initialState = {
+    summary: task?.summary ?? "",
+    subTasks: task?.subTasks ?? [],
+    priority: task?.priority ?? Priority.Medium,
+    description: task?.description ?? "",
+    startDate: task?.startDate ?? "",
+    endDate: task?.endDate ?? "",
+    status: task?.status ?? Status.Queue,
+    files: task?.files ?? [],
+  }
+
+  const [value, setValue] = useState(initialState);
+
+  console.log(value);
+
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.name);
+
+    console.log(event.target.value);
+
     setValue({
       ...value,
       [event.target.name]: event.target.value,
     });
   };
 
-  const closeModal = () => {
-    setActive(false);
-  };
+  const handleClose = () => {
+    ref.current?.close();
+  }
 
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -43,6 +53,18 @@ const Modal = ({active, setActive, task, editTask}: IModal) => {
       ref.current?.close();
     }
   }, [active]);
+
+  useEffect(() => {
+    setValue(initialState);
+  }, [active]);
+
+  useEffect(() => {
+    ref.current?.addEventListener('close', onClose);
+
+    return () => ref.current?.removeEventListener('close', onClose);
+
+  }, [onClose, ref]);
+
 
   return (
     <dialog ref={ref}>
@@ -55,7 +77,6 @@ const Modal = ({active, setActive, task, editTask}: IModal) => {
             name={"summary"}
             placeholder="Summary"
             type="text"
-            disabled
           />
         </label>
         <label>
@@ -66,44 +87,27 @@ const Modal = ({active, setActive, task, editTask}: IModal) => {
             name={"description"}
             placeholder="Description"
             type="text"
-            disabled
-          />
-        </label>
-        <label>
-          Commecement date:
-          <input
-            onChange={onChange}
-            value={value.startDate}
-            name={"commecement"}
-            placeholder="Commecement date"
-            type="date"
-            disabled
-          />
-        </label>
-        <label>
-          Сompletion date:
-          <input
-            onChange={onChange}
-            value={value.endDate}
-            name={"Сompletion"}
-            placeholder="Сompletion date"
-            type="date"
-            disabled
           />
         </label>
         <p>
+          Start: {value.startDate}
+        </p>
+        <p>
+          End: {value.endDate}
+        </p>
+        <p>
           Priority:
           <label>
-            <input type="radio" name="priority" value="Low" onChange={onChange}/>Low
+            <input type="radio" name="priority" value={Priority.Low} onChange={onChange} checked={value.priority === Priority.Low} />Low
           </label>
           <label>
-            <input type="radio" name="priority" value="Medium" onChange={onChange}/>Medium
+            <input type="radio" name="priority" value={Priority.Medium} onChange={onChange} checked={value.priority === Priority.Medium} />Medium
           </label>
           <label>
-            <input type="radio" name="priority" value="High" onChange={onChange}/>High
+            <input type="radio" name="priority" value={Priority.High} onChange={onChange} checked={value.priority === Priority.High} />High
           </label>
         </p>
-        <label> 
+        <label>
           <input
             name={"file"}
             type="file"
@@ -122,13 +126,13 @@ const Modal = ({active, setActive, task, editTask}: IModal) => {
             <input type="radio" name="myRadio2" value="Done" />Done
           </label>
         </p> */}
-        <button>+</button>
+        <button>+</button>editTask
         <p>Comments:</p>
-        <button onClick={editTask}>Edit</button>
-        {/* {task.id && <button onClick={saveTask}>Save</button>}
-        {task.id && <button onClick={removeTask}>Delete</button>} */}
+        {saveTask && <button onClick={() => saveTask(value)}>Save</button>}
+        {editTask && task?.id && <button onClick={() => editTask(value, task.id)}>Edit</button>}
+        {removeTask && task?.id && <button onClick={() => removeTask(task.id)}>Delete</button>}
       </div>
-      <button onClick={closeModal}>close</button>
+      <button onClick={handleClose}>close</button>
     </dialog>
   );
 };

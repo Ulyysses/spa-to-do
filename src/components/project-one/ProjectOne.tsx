@@ -1,27 +1,30 @@
 import { useState } from "react";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { useAppSelector } from "../../hooks";
-import { useDispatch } from "react-redux";
 
 import css from "../project-one/index.module.scss";
-import { ITask, Priority, Status } from "../../types";
-import { addTask, deleteTask } from "../../services/actions/actions";
+import { ITask, Status } from "../../types";
 import ModalContainer from "../modal-container";
+import Card from "../card/Card";
+import Drop from "../drop";
 
 const ProjectOne = () => {
   const [active, setActive] = useState(false);
 
-  const [modalData, setModalData] = useState('')
+  const [currentModalId, setCurrentModalId] = useState('');
+
+  const onClose = () => {
+    setCurrentModalId('');
+    setActive(false)
+  }
 
   const openModal = (id: string) => {
-    setModalData(id);
+    setCurrentModalId(id);
     setActive(true);
   };
 
-  // const addNewTask = () => {
-  //   setActive(true);
-  // }
+  const addNewTask = () => {
+    setActive(true);
+  }
 
   const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
 
@@ -31,64 +34,60 @@ const ProjectOne = () => {
 
   return (
     <>
-      <DndProvider backend={HTML5Backend}>
-        <button onClick={() => openModal}>Add task</button>
 
-        <div className={css.list_wrapper}>
+      <button onClick={addNewTask}>Add task</button>
+
+      <div className={css.list_wrapper}>
+
+        <Drop status={Status.Queue}>
+          <h2>Queue</h2>
           <ul className={css.list}>
-            <h2>Queue</h2>
             {queueTasks.map((task: ITask) => {
               return (
                 <li className={css.item} key={task.id}>
                   <button onClick={() => openModal(task.id)}>
-                    <div className={css.task_container}>
-                      <p>{task.id}</p>
-                      <p>{task.summary}</p>
-                      <p>{task.priority}</p>
-                    </div>
+                    <Card id={task.id} priority={task.priority} summary={task.summary} />
                   </button>
                 </li>
               );
             })}
           </ul>
+        </Drop>
 
+        <Drop status={Status.Development}>
           <ul className={css.list}>
             <h2>Development</h2>
             {developmentTasks.map((task: ITask) => {
               return (
                 <li className={css.item} key={task.id}>
                   <button onClick={() => openModal(task.id)}>
-                    <div className={css.task_container}>
-                      <p>{task.id}</p>
-                      <p>{task.summary}</p>
-                      <p>{task.priority}</p>
-                    </div>
+                    <Card id={task.id} priority={task.priority} summary={task.summary} />
                   </button>
                 </li>
               );
             })}
           </ul>
+        </Drop>
 
+        <Drop status={Status.Done}>
           <ul className={css.list}>
             <h2>Done</h2>
             {doneTasks.map((task: ITask) => {
               return (
                 <li className={css.item} key={task.id}>
                   <button onClick={() => openModal(task.id)}>
-                    <div className={css.task_container}>
-                      <p>{task.id}</p>
-                      <p>{task.summary}</p>
-                      <p>{task.priority}</p>
-                    </div>
+                    <Card id={task.id} priority={task.priority} summary={task.summary} />
                   </button>
                 </li>
               );
             })}
           </ul>
-        </div>
-      </DndProvider>
+        </Drop>
 
-      <ModalContainer active={active} setActive={setActive} id={modalData}/>
+      </div>
+
+
+      <ModalContainer active={active} setActive={setActive} id={currentModalId} onClose={onClose} />
     </>
   );
 };

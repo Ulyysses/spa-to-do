@@ -1,5 +1,10 @@
 import { ITask, Priority, Status, TForm } from "../../types";
-import { ADD_TASK, DELETE_TASK } from "../actions/constants";
+import { ADD_TASK, DELETE_TASK, EDIT_TASK } from "../actions/constants";
+
+interface IEditTaskPayload {
+  editedTask:  Partial<TForm>;
+  taskId: string;
+}
 
 const initialState: {
   allTasks: ITask[];
@@ -8,7 +13,7 @@ const initialState: {
   allTasks: [{
     id: "4214bef0-1a99-4e46-8173-dfb447769aa7",
     summary: 'Первая задача',
-    priority: Priority.Low,
+    priority: Priority.High,
     description: 'Первая задача для примера',
     startDate: '09.03.2023',
     status: Status.Development,
@@ -25,7 +30,13 @@ export const tasksReducer = (
   }
     | {
       type: 'DELETE_TASK';
-      payload: string;
+      payload: {
+        taskId: string
+      };
+    }
+    | {
+      type: 'EDIT_TASK';
+      payload: IEditTaskPayload;
     }
 ) => {
   switch (action.type) {
@@ -43,13 +54,39 @@ export const tasksReducer = (
       };
     }
     case DELETE_TASK: {
-      const taskId = action.payload;
+      const taskId = action.payload.taskId;
       const updatedAllTasks = state.allTasks.filter(task => task.id !== taskId);
       return {
         ...state,
         allTasks: updatedAllTasks,
       };
     }
+    case EDIT_TASK: {
+      const { editedTask, taskId } = action.payload;
+
+      // let newTask: Partial<TForm>
+
+      // if (editedTask.status === Status.Done) {
+      //   newTask = {
+      //     ...editedTask,
+      //     endDate: new Date()
+      //   };
+      // }
+
+      const updatedAllTasks = state.allTasks.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            ...editedTask,
+          };
+        }
+        return task;
+      });
+      return {
+        ...state,
+        allTasks: updatedAllTasks,
+      };
+    } 
     default: {
       return state;
     }

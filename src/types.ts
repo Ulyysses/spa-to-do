@@ -12,15 +12,15 @@ export interface ITask {
 }
 
 export enum Priority {
-  Low,
-  Medium,
-  High,
+  Low = 'Low',
+  Medium = 'Medium',
+  High = 'High',
 }
 
 export enum Status {
-  Queue,
-  Development,
-  Done,
+  Queue = 'Queue',
+  Development = 'Development',
+  Done = 'Done',
 }
 
 export type TForm = Omit<ITask, 'project' | 'id'>
