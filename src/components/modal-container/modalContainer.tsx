@@ -1,5 +1,5 @@
 import Modal from "../modal/Modal";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppSelector } from "../../hooks";
 import { useState } from "react";
 import { addTask, deleteTask, editTask } from "../../services/actions/actions";
 import { ITask, TForm } from "../../types";

@@ -1,0 +1,12 @@
+// .drop {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+// }
+
+.drop_hover {
+  outline: 1px solid var(--orange);
+  border-radius: 30px;
+  width: 400px;
+  padding-bottom: 20px;
+}

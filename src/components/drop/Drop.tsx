@@ -3,6 +3,8 @@ import { useDrop } from "react-dnd";
 import { Status, TForm } from '../../types';
 import { useDispatch } from 'react-redux';
 import { editTask } from '../../services/actions/actions';
+import classNames from "classnames";
+import css from "./index.module.scss";
 
 interface IDrop {
     children: ReactNode;
@@ -25,7 +27,7 @@ const Drop = ({ children, status }: IDrop) => {
     });
 
     return (
-        <div ref={dropTarget}>
+        <div ref={dropTarget} className={classNames(css.drop, isHover && css.drop_hover)}>
             {children}
         </div>
     )

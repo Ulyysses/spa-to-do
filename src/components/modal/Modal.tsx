@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { addTask, deleteTask } from "../../services/actions/actions";
 import { ITask, Priority, Status, TForm } from "../../types";
+import css from "./index.module.scss";
 
 interface IModal {
   active: boolean;
@@ -114,23 +115,11 @@ const Modal = ({ active, task, editTask, removeTask, saveTask, onClose }: IModal
             disabled
           />
         </label>
-        {/* <p>
-          Status:
-          <label>
-            <input type="radio" name="myRadio2" value="Queue" />Queue
-          </label>
-          <label>
-            <input type="radio" name="myRadio2" value="Development" />Development
-          </label>
-          <label>
-            <input type="radio" name="myRadio2" value="Done" />Done
-          </label>
-        </p> */}
         <button>+</button>editTask
         <p>Comments:</p>
-        {saveTask && <button onClick={() => saveTask(value)}>Save</button>}
-        {editTask && task?.id && <button onClick={() => editTask(value, task.id)}>Edit</button>}
-        {removeTask && task?.id && <button onClick={() => removeTask(task.id)}>Delete</button>}
+        {saveTask && <button onClick={() => saveTask(value)} className={css.modal_button}>Save</button>}
+        {editTask && task?.id && <button onClick={() => editTask(value, task.id)} className={css.modal_button}>Edit</button>}
+        {removeTask && task?.id && <button onClick={() => removeTask(task.id)} className={css.modal_button}>Delete</button>}
       </div>
       <button onClick={handleClose}>close</button>
     </dialog>

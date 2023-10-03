@@ -1,10 +1,6 @@
-.task_container {
-  background-color: #CFE4FB;
-  width: 200px;
-}
-
 .list {
   text-align: center;
+  width: 400px;
 }
 
 .list_wrapper {
@@ -12,7 +8,32 @@
   justify-content: space-around;
 }
 
-.task_container {
-  width: 300px;
+.list_title {
+  text-align: center;
+}
+
+.add_button {
+  font-size: 15px;
+  width: 100px;
+  padding: 10px;
+  margin: 20px 40px;
+  border: none;
+  background-color: var(--grey);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--lightOrange);
+  }
+}
+
+.card {
   text-align: start;
+  cursor: pointer;
+  background-color: var(--grey);
+  border: 2px solid var(--grey);
+  font-size: 15px;
+
+  &:hover {
+    border: 2px solid var(--lightOrange);
+  }
 }
