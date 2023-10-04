@@ -4,11 +4,12 @@ export interface ITask {
   subTasks?: number[];
   priority: Priority;
   description: string;
-  startDate?: string;
-  endDate?: string;
+  startDate?: string | null;
+  endDate?: string | null;
   status: Status;
   files?: string[];
   project: string;
+  comments?: string
 }
 
 export enum Priority {

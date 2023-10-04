@@ -1,4 +1,4 @@
-import css from "../main-page/index.module.scss";
+import css from "./index.module.scss";
 
 const MainPage = () => {
   return (

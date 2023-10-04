@@ -1,6 +1,9 @@
 .list {
   text-align: center;
   width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .list_wrapper {
@@ -32,6 +35,7 @@
   background-color: var(--grey);
   border: 2px solid var(--grey);
   font-size: 15px;
+  width: 300px;
 
   &:hover {
     border: 2px solid var(--lightOrange);

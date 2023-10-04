@@ -1,8 +1,14 @@
-import { ITask, Priority, Status, TForm } from "../../types";
-import { ADD_TASK, DELETE_TASK, EDIT_TASK } from "../actions/constants";
+import { ITask, Status, TForm } from "../../types";
+import {
+  ADD_TASK,
+  DELETE_TASK,
+  EDIT_TASK,
+} from "../actions/constants";
+import dayjs from "dayjs";
+import { Dayjs } from "dayjs";
 
 interface IEditTaskPayload {
-  editedTask:  Partial<TForm>;
+  editedTask: Partial<TForm>;
   taskId: string;
 }
 
@@ -10,34 +16,27 @@ const initialState: {
   allTasks: ITask[];
   allProjects: string[];
 } = {
-  allTasks: [{
-    id: "4214bef0-1a99-4e46-8173-dfb447769aa7",
-    summary: 'Первая задача',
-    priority: Priority.High,
-    description: 'Первая задача для примера',
-    startDate: '09.03.2023',
-    status: Status.Development,
-    project: "project-one",
-  }],
+  allTasks: [],
   allProjects: ["project-one"],
 };
 
 export const tasksReducer = (
   state = initialState,
-  action: | {
-    type: 'ADD_TASK';
-    payload: TForm;
-  }
+  action:
     | {
-      type: 'DELETE_TASK';
-      payload: {
-        taskId: string
-      };
-    }
+        type: "ADD_TASK";
+        payload: TForm;
+      }
     | {
-      type: 'EDIT_TASK';
-      payload: IEditTaskPayload;
-    }
+        type: "DELETE_TASK";
+        payload: {
+          taskId: string;
+        };
+      }
+    | {
+        type: "EDIT_TASK";
+        payload: IEditTaskPayload;
+      }
 ) => {
   switch (action.type) {
     case ADD_TASK: {
@@ -55,7 +54,9 @@ export const tasksReducer = (
     }
     case DELETE_TASK: {
       const taskId = action.payload.taskId;
-      const updatedAllTasks = state.allTasks.filter(task => task.id !== taskId);
+      const updatedAllTasks = state.allTasks.filter(
+        (task) => task.id !== taskId
+      );
       return {
         ...state,
         allTasks: updatedAllTasks,
@@ -64,20 +65,31 @@ export const tasksReducer = (
     case EDIT_TASK: {
       const { editedTask, taskId } = action.payload;
 
-      // let newTask: Partial<TForm>
-
-      // if (editedTask.status === Status.Done) {
-      //   newTask = {
-      //     ...editedTask,
-      //     endDate: new Date()
-      //   };
-      // }
-
       const updatedAllTasks = state.allTasks.map((task) => {
         if (task.id === taskId) {
+          const date: {
+            startDate?: string | null;
+            endDate?: string | null;
+          } = {};
+
+          if (editedTask.status === Status.Development) {
+            date.startDate = dayjs().format();
+            date.endDate = null;
+          }
+
+          if (editedTask.status === Status.Done) {
+            date.endDate = dayjs().format();
+          }
+
+          if (editedTask.status === Status.Queue) {
+            date.startDate = null;
+            date.endDate = null;
+          }
+
           return {
             ...task,
             ...editedTask,
+            ...date,
           };
         }
         return task;
@@ -86,7 +98,7 @@ export const tasksReducer = (
         ...state,
         allTasks: updatedAllTasks,
       };
-    } 
+    }
     default: {
       return state;
     }

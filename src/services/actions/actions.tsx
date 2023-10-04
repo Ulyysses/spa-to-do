@@ -1,6 +1,5 @@
-import { ITask, Status, TForm } from "../../types";
+import { TForm } from "../../types";
 import { ADD_TASK, DELETE_TASK, EDIT_TASK } from "./constants";
-
 
 export const addTask = (formData: TForm) => ({
   type: ADD_TASK,

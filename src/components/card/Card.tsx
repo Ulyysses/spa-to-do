@@ -1,6 +1,6 @@
-import { Priority } from "../../types";
 import { useDrag } from "react-dnd";
-import css from "../card/index.module.scss";
+
+import { Priority } from "../../types";
 
 interface ICard {
   id: string;
@@ -15,7 +15,7 @@ const Card = ({ id, summary, priority }: ICard) => {
   });
 
   return (
-    <div className={css.task_container} ref={dragRef}>
+    <div ref={dragRef}>
       <p>{id}</p>
       <p>{summary}</p>
       <p>{priority}</p>

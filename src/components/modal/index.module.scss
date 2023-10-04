@@ -1,4 +1,68 @@
 .modal_container {
-    border: none;
-    display: flex;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 700px;
+  padding-top: 5px;
+}
+
+.summary_input {
+  border: 1px solid var(--orange);
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+.description_input {
+  border: 1px solid var(--orange);
+  width: 100%;
+  padding-bottom: 40px;
+  font-family: "Roboto", sans-serif;
+}
+
+.comments_input {
+  border: 1px solid var(--orange);
+  width: 100%;
+  padding-bottom: 80px;
+  font-family: "Roboto", sans-serif;
+}
+
+.label {
+  width: 100%;
+}
+
+.date {
+  margin: 0;
+}
+
+.modal_button {
+  width: 80px;
+  padding: 5px;
+  border: none;
+  background-color: var(--grey);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--lightOrange);
+  }
+}
+
+.buttons_container {
+  display: flex;
+  gap: 5px;
+}
+
+.close_button {
+  font-size: 20px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  &:hover {
+    color: var(--orange);
+  }
 }
