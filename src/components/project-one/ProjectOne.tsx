@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppSelector } from "../../hooks";
 
-import css from "../project-one/index.module.scss";
+import css from "./index.module.scss";
 import { ITask, Status } from "../../types";
 import ModalContainer from "../modal-container";
 import Card from "../card/Card";

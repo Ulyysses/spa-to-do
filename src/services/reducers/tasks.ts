@@ -5,7 +5,6 @@ import {
   EDIT_TASK,
 } from "../actions/constants";
 import dayjs from "dayjs";
-import { Dayjs } from "dayjs";
 
 interface IEditTaskPayload {
   editedTask: Partial<TForm>;

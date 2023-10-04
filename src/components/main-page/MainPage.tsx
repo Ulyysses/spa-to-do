@@ -7,15 +7,12 @@ const MainPage = () => {
       <ul className={css.projects_list}>
         <li>
           <a href="/project-one" className={css.project}>
-            <img alt="gear" src="../../images/gear.png">
-            </img>
-            <p>Project "One"</p>
+            Project "One"
           </a>
         </li>
         <li>
           <a href="#" className={css.project}>
-            <img alt="gear" src="../../images/gear.png" />
-            <p>Project "Two"</p>
+            Project "Two"
           </a>
         </li>
       </ul>

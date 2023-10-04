@@ -1,5 +1,9 @@
 .project {
-  color: #000;
+  color: var(--black);
+
+  &:hover {
+    text-decoration: underline var(--orange);
+  }
 }
 
 .wrapper {

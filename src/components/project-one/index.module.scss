@@ -1,9 +1,15 @@
+@use "../../variables.scss";
+
 .list {
   text-align: center;
-  width: 400px;
+  width: 100px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  @media (min-width: variables.$tablet-desktop-width) {
+    width: 400px;
+  }
 }
 
 .list_wrapper {
@@ -16,16 +22,23 @@
 }
 
 .add_button {
-  font-size: 15px;
-  width: 100px;
-  padding: 10px;
-  margin: 20px 40px;
+  font-size: 10px;
+  width: 60px;
+  padding: 8px;
+  margin: 10px 20px;
   border: none;
   background-color: var(--grey);
   cursor: pointer;
 
   &:hover {
     background-color: var(--lightOrange);
+  }
+
+  @media (min-width: variables.$tablet-desktop-width) {
+    font-size: 15px;
+    width: 100px;
+    padding: 10px;
+    margin: 20px 40px;
   }
 }
 
@@ -34,10 +47,15 @@
   cursor: pointer;
   background-color: var(--grey);
   border: 2px solid var(--grey);
-  font-size: 15px;
-  width: 300px;
+  font-size: 10px;
+  width: 80px;
 
   &:hover {
     border: 2px solid var(--lightOrange);
+  }
+
+  @media (min-width: variables.$tablet-desktop-width) {
+    width: 300px;
+    font-size: 15px;
   }
 }

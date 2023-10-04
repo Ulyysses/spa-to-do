@@ -1,5 +1,4 @@
 import { useDrag } from "react-dnd";
-
 import { Priority } from "../../types";
 
 interface ICard {
