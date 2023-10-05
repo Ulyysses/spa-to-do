@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 
 import { useAppSelector } from "../../hooks";
 import css from "./index.module.scss";
@@ -22,25 +22,32 @@ const Project = () => {
 
   const filteredTasks = allTasks.filter((task) => task.id.includes(searchId));
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     setCurrentModalId("");
     setActive(false);
-  };
+  }, []);
 
-  const openModal = (id: string) => {
+  const openModal = useCallback((id: string) => {
     setCurrentModalId(id);
     setActive(true);
-  };
+  }, []);
 
   const addNewTask = () => {
     setActive(true);
   };
 
-  const queueTasks = filteredTasks.filter((task) => task.status === Status.Queue);
-  const developmentTasks = filteredTasks.filter(
-    (task) => task.status === Status.Development
+  const queueTasks = useMemo(
+    () => filteredTasks.filter((task) => task.status === Status.Queue),
+    [filteredTasks]
   );
-  const doneTasks = filteredTasks.filter((task) => task.status === Status.Done);
+  const developmentTasks = useMemo(
+    () => filteredTasks.filter((task) => task.status === Status.Development),
+    [filteredTasks]
+  );
+  const doneTasks = useMemo(
+    () => filteredTasks.filter((task) => task.status === Status.Done),
+    [filteredTasks]
+  );
 
   return (
     <>

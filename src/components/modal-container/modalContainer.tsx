@@ -4,6 +4,7 @@ import Modal from "../modal/Modal";
 import { useAppSelector } from "../../hooks";
 import { addTask, deleteTask, editTask } from "../../services/actions/actions";
 import { TForm } from "../../types";
+import { useCallback, useMemo } from "react";
 
 interface IModalContainer {
   active: boolean;
@@ -20,24 +21,24 @@ const ModalContainer = ({
 }: IModalContainer) => {
   const dispatch = useDispatch();
 
-  const changeTask = (task: TForm, id: string) => {
+  const changeTask = useCallback((task: TForm, id: string) => {
     dispatch(editTask(task, id));
     setActive(false);
-  };
+  }, [dispatch, setActive]);
 
-  const removeTask = (id: string) => {
+  const removeTask = useCallback((id: string) => {
     dispatch(deleteTask(id));
     setActive(false);
-  };
+  }, [dispatch, setActive]);
 
   const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
 
-  const task = allTasks.find((task) => task.id === id);
+  const task = useMemo(() => allTasks.find((task) => task.id === id), [id, allTasks]);
 
-  const saveTask = (task: TForm) => {
+  const saveTask = useCallback((task: TForm) => {
     dispatch(addTask(task));
     setActive(false);
-  };
+  }, [dispatch, setActive]);
 
   if (!task) {
     return <Modal active={active} saveTask={saveTask} onClose={onClose} />;

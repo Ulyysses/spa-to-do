@@ -162,17 +162,22 @@ const Modal = ({
         </label>
         <div>
           <p className={css.select}>Choose subtasks:</p>
-          <select name="subtasks" size={3} multiple onChange={onChangeSelect}>
-            {allTasks.map((task) => {
-              return (
-                <option
-                  key={task.id}
-                  value={task.id}
-                  selected={value.subTasks.includes(task.id)}
-                >
-                  {task.summary}
-                </option>
-              );
+          <select
+            name="subtasks"
+            size={3}
+            multiple
+            onChange={onChangeSelect}
+            value={value.subTasks}
+          >
+            {allTasks.map((taskItem) => {
+              if (taskItem.id !== task?.id) {
+                return (
+                  <option key={taskItem.id} value={taskItem.id}>
+                    {taskItem.summary}
+                  </option>
+                );
+              }
+              return null;
             })}
           </select>
         </div>
