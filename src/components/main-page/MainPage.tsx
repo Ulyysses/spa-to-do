@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import css from "./index.module.scss";
 
 const MainPage = () => {
@@ -6,9 +7,9 @@ const MainPage = () => {
       <h1>My projects:</h1>
       <ul className={css.projects_list}>
         <li>
-          <a href="/spa-to-do/my-first-project" className={css.project}>
+          <Link to="/spa-to-do/my-first-project" className={css.project}>
             My first project
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
