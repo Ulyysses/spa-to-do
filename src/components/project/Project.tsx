@@ -7,7 +7,7 @@ import ModalContainer from "../modal-container";
 import Card from "../card/Card";
 import Drop from "../drop";
 
-const ProjectOne = () => {
+const Project = () => {
   const [active, setActive] = useState(false);
 
   const [currentModalId, setCurrentModalId] = useState("");
@@ -134,4 +134,4 @@ const ProjectOne = () => {
   );
 };
 
-export default ProjectOne;
+export default Project;
