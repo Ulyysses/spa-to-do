@@ -1,9 +1,5 @@
-import { ITask, Status, TForm } from "../../types";
-import {
-  ADD_TASK,
-  DELETE_TASK,
-  EDIT_TASK,
-} from "../actions/constants";
+import { ITask, Priority, Status, TForm } from "../../types";
+import { ADD_TASK, DELETE_TASK, EDIT_TASK } from "../actions/constants";
 import dayjs from "dayjs";
 
 interface IEditTaskPayload {
@@ -15,7 +11,29 @@ const initialState: {
   allTasks: ITask[];
   allProjects: string[];
 } = {
-  allTasks: [],
+  allTasks: [
+    {
+      id: "1",
+      summary: "Первая задачка",
+      subTasks: ["2"],
+      priority: Priority.Medium,
+      description: "Это первая задачка для теста",
+      startDate: "02/10/2023",
+      status: Status.Development,
+      project: "project-one",
+      comments: "Тут можно оставить комментарий",
+    },
+    {
+      id: "2",
+      summary: "Вторая задачка",
+      priority: Priority.High,
+      description: "Это вторая задачка для теста",
+      startDate: "01/10/2023",
+      endDate: "02/10/2023",
+      status: Status.Done,
+      project: "project-one",
+    },
+  ],
   allProjects: ["project-one"],
 };
 

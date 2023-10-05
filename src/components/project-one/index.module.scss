@@ -59,3 +59,33 @@
     font-size: 15px;
   }
 }
+
+.highlighted_card {
+  border: 2px solid var(--lightOrange);
+}
+
+.find_button {
+  font-size: 10px;
+  width: 60px;
+  padding: 8px;
+  margin: 5px 5px;
+  border: none;
+  background-color: var(--grey);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--lightOrange);
+  }
+
+  @media (min-width: variables.$tablet-desktop-width) {
+    font-size: 15px;
+    width: 100px;
+    padding: 10px;
+    margin: 20px 10px;
+  }
+}
+
+.find_input {
+  height: 30px;
+  border: 2px solid var(--orange);
+}

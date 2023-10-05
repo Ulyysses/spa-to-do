@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useAppSelector } from "../../hooks";
+import { ChangeEvent, useState } from "react";
 
+import { useAppSelector } from "../../hooks";
 import css from "./index.module.scss";
 import { ITask, Status } from "../../types";
 import ModalContainer from "../modal-container";
@@ -11,6 +11,16 @@ const ProjectOne = () => {
   const [active, setActive] = useState(false);
 
   const [currentModalId, setCurrentModalId] = useState("");
+
+  const [searchId, setSearchId] = useState("");
+
+  const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
+
+  const handleInputSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchId(event.target.value);
+  };
+
+  const filteredTasks = allTasks.filter((task) => task.id.includes(searchId));
 
   const onClose = () => {
     setCurrentModalId("");
@@ -26,17 +36,25 @@ const ProjectOne = () => {
     setActive(true);
   };
 
-  const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
-
-  const queueTasks = allTasks.filter((task) => task.status === Status.Queue);
-  const developmentTasks = allTasks.filter(
+  const queueTasks = filteredTasks.filter((task) => task.status === Status.Queue);
+  const developmentTasks = filteredTasks.filter(
     (task) => task.status === Status.Development
   );
-  const doneTasks = allTasks.filter((task) => task.status === Status.Done);
+  const doneTasks = filteredTasks.filter((task) => task.status === Status.Done);
 
   return (
     <>
-      <button onClick={addNewTask} className={css.add_button}>Add task</button>
+      <button onClick={addNewTask} className={css.add_button}>
+        Add task
+      </button>
+
+      <input
+        type="text"
+        placeholder="Enter id"
+        value={searchId}
+        onChange={handleInputSearchChange}
+        className={css.find_input}
+      />
 
       <div className={css.list_wrapper}>
         <Drop status={Status.Queue}>
@@ -45,7 +63,10 @@ const ProjectOne = () => {
             {queueTasks.map((task: ITask) => {
               return (
                 <li className={css.item} key={task.id}>
-                  <button onClick={() => openModal(task.id)} className={css.card}>
+                  <button
+                    onClick={() => openModal(task.id)}
+                    className={css.card}
+                  >
                     <Card
                       id={task.id}
                       priority={task.priority}
@@ -64,7 +85,10 @@ const ProjectOne = () => {
             {developmentTasks.map((task: ITask) => {
               return (
                 <li className={css.item} key={task.id}>
-                  <button onClick={() => openModal(task.id)} className={css.card}>
+                  <button
+                    onClick={() => openModal(task.id)}
+                    className={css.card}
+                  >
                     <Card
                       id={task.id}
                       priority={task.priority}
@@ -83,7 +107,10 @@ const ProjectOne = () => {
             {doneTasks.map((task: ITask) => {
               return (
                 <li className={css.item} key={task.id}>
-                  <button onClick={() => openModal(task.id)} className={css.card}>
+                  <button
+                    onClick={() => openModal(task.id)}
+                    className={css.card}
+                  >
                     <Card
                       id={task.id}
                       priority={task.priority}

@@ -9,7 +9,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/project-one" element={<ProjectOne />} />
-        {/* <Route path="/project2" element={<Project2 />} /> */}
       </Routes>
     </main>
   );

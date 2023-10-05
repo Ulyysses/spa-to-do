@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { ITask, Priority, Status, TForm } from "../../types";
 import css from "./index.module.scss";
 import dayjs from "dayjs";
+import { useAppSelector } from "../../hooks";
 interface IModal {
   active: boolean;
   task?: ITask;
@@ -20,7 +21,6 @@ const Modal = ({
   saveTask,
   onClose,
 }: IModal) => {
-
   const initialState = {
     summary: task?.summary ?? "",
     subTasks: task?.subTasks ?? [],
@@ -30,7 +30,7 @@ const Modal = ({
     endDate: task?.endDate ?? null,
     status: task?.status ?? Status.Queue,
     files: task?.files ?? [],
-    comments: task?.comments ?? ""
+    comments: task?.comments ?? "",
   };
 
   const [value, setValue] = useState(initialState);
@@ -67,14 +67,28 @@ const Modal = ({
   }, [onClose, ref]);
 
   const countDays = () => {
-    const diff = dayjs(value.endDate)?.diff(dayjs(value.startDate), 'day');
+    const diff = dayjs(value.endDate)?.diff(dayjs(value.startDate), "day");
     const days = diff !== undefined ? diff + 1 : undefined;
-    return days === 1 ? '1 day' : days !== undefined ? `${days} days` : '';
+    return days === 1 ? "1 day" : days !== undefined ? `${days} days` : "";
+  };
+
+  const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
+
+  const onChangeSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    const ids = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    setValue({
+      ...value,
+      subTasks: ids,
+    });
   };
 
   return (
     <dialog ref={ref}>
       <div className={css.modal_container}>
+        <p className={css.id}>{task?.id}</p>
         <label className={css.label}>
           Summary:
           <input
@@ -97,9 +111,19 @@ const Modal = ({
             className={css.description_input}
           />
         </label>
-        {value.startDate && <p className={css.date}>Start: {dayjs(value.startDate).format('DD/MM/YYYY')}</p>}
-        {value.endDate && <p className={css.date}>End: {dayjs(value.endDate).format('DD/MM/YYYY')}</p>}
-        {value.endDate && <p className={css.date}>Time at work: {countDays()}</p>}
+        {value.startDate && (
+          <p className={css.date}>
+            Start: {dayjs(value.startDate).format("DD/MM/YYYY")}
+          </p>
+        )}
+        {value.endDate && (
+          <p className={css.date}>
+            End: {dayjs(value.endDate).format("DD/MM/YYYY")}
+          </p>
+        )}
+        {value.endDate && (
+          <p className={css.date}>Time at work: {countDays()}</p>
+        )}
         <div>
           Priority:
           <label>
@@ -134,9 +158,24 @@ const Modal = ({
           </label>
         </div>
         <label>
-          <input name={"file"} type="file" />
+          <input name={"file"} type="file" multiple />
         </label>
-        {/* <button>+</button> */}
+        <div>
+          <p className={css.select}>Choose subtasks:</p>
+          <select name="subtasks" size={3} multiple onChange={onChangeSelect}>
+            {allTasks.map((task) => {
+              return (
+                <option
+                  key={task.id}
+                  value={task.id}
+                  selected={value.subTasks.includes(task.id)}
+                >
+                  {task.summary}
+                </option>
+              );
+            })}
+          </select>
+        </div>
         <label className={css.label}>
           Comments:
           <input
@@ -182,4 +221,3 @@ const Modal = ({
 };
 
 export default Modal;
-

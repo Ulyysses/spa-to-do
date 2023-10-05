@@ -10,11 +10,6 @@ const MainPage = () => {
             Project "One"
           </a>
         </li>
-        <li>
-          <a href="#" className={css.project}>
-            Project "Two"
-          </a>
-        </li>
       </ul>
     </div>
   );

@@ -1,7 +1,7 @@
 export interface ITask {
   id: string;
   summary: string;
-  subTasks?: number[];
+  subTasks?: string[];
   priority: Priority;
   description: string;
   startDate?: string | null;
