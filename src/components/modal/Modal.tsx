@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { ITask, Priority, Status, TForm } from "../../types";
 import css from "./index.module.scss";
 import dayjs from "dayjs";
-import { useAppSelector } from "../../hooks";
+
 interface IModal {
   active: boolean;
   task?: ITask;
@@ -11,6 +11,7 @@ interface IModal {
   removeTask?: (value: string) => void;
   saveTask?: (value: TForm) => void;
   onClose: () => void;
+  allProjectTasks: ITask[];
 }
 
 const Modal = ({
@@ -20,6 +21,7 @@ const Modal = ({
   removeTask,
   saveTask,
   onClose,
+  allProjectTasks,
 }: IModal) => {
   const initialState = {
     summary: task?.summary ?? "",
@@ -71,8 +73,6 @@ const Modal = ({
     const days = diff !== undefined ? diff + 1 : undefined;
     return days === 1 ? "1 day" : days !== undefined ? `${days} days` : "";
   };
-
-  const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
 
   const onChangeSelect = (event: ChangeEvent<HTMLSelectElement>) => {
     const ids = Array.from(
@@ -169,7 +169,7 @@ const Modal = ({
             onChange={onChangeSelect}
             value={value.subTasks}
           >
-            {allTasks.map((taskItem) => {
+            {allProjectTasks.map((taskItem) => {
               if (taskItem.id !== task?.id) {
                 return (
                   <option key={taskItem.id} value={taskItem.id}>

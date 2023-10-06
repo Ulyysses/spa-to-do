@@ -10,23 +10,32 @@ import Drop from "../drop";
 
 const Project = () => {
   const [active, setActive] = useState(false);
-
   const [currentModalId, setCurrentModalId] = useState("");
-
   const [searchId, setSearchId] = useState("");
 
   const { project } = useParams();
 
   const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
+  const allProjectTasks = allTasks.filter((task) => project && task.project === project);
+  const filteredFoundTasks = allProjectTasks.filter((task) => task.id.includes(searchId));
 
-  const allFilteredTasks = allTasks.filter((task) => project && task.project.includes(project))
+  const queueTasks = useMemo(
+    () => filteredFoundTasks.filter((task) => task.status === Status.Queue),
+    [filteredFoundTasks]
+  );
+  const developmentTasks = useMemo(
+    () => filteredFoundTasks.filter((task) => task.status === Status.Development),
+    [filteredFoundTasks]
+  );
+  const doneTasks = useMemo(
+    () => filteredFoundTasks.filter((task) => task.status === Status.Done),
+    [filteredFoundTasks]
+  );
 
   const handleInputSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchId(event.target.value);
   };
-
-  const filteredTasks = allFilteredTasks.filter((task) => task.id.includes(searchId));
-
+  
   const onClose = useCallback(() => {
     setCurrentModalId("");
     setActive(false);
@@ -40,19 +49,6 @@ const Project = () => {
   const addNewTask = () => {
     setActive(true);
   };
-
-  const queueTasks = useMemo(
-    () => filteredTasks.filter((task) => task.status === Status.Queue),
-    [filteredTasks]
-  );
-  const developmentTasks = useMemo(
-    () => filteredTasks.filter((task) => task.status === Status.Development),
-    [filteredTasks]
-  );
-  const doneTasks = useMemo(
-    () => filteredTasks.filter((task) => task.status === Status.Done),
-    [filteredTasks]
-  );
 
   return (
     <>
@@ -141,6 +137,7 @@ const Project = () => {
         setActive={setActive}
         id={currentModalId}
         onClose={onClose}
+        allProjectTasks={allProjectTasks}
       />
     </>
   );

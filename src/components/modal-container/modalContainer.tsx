@@ -2,9 +2,8 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Modal from "../modal/Modal";
-import { useAppSelector } from "../../hooks";
 import { addTask, deleteTask, editTask } from "../../services/actions/actions";
-import { TForm } from "../../types";
+import { ITask, TForm } from "../../types";
 import { useCallback, useMemo } from "react";
 
 interface IModalContainer {
@@ -12,6 +11,7 @@ interface IModalContainer {
   setActive: (value: boolean) => void;
   id: string;
   onClose: () => void;
+  allProjectTasks: ITask[];
 }
 
 const ModalContainer = ({
@@ -19,6 +19,7 @@ const ModalContainer = ({
   setActive,
   id,
   onClose,
+  allProjectTasks
 }: IModalContainer) => {
   const dispatch = useDispatch();
 
@@ -38,11 +39,9 @@ const ModalContainer = ({
     [dispatch, setActive]
   );
 
-  const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
-
   const task = useMemo(
-    () => allTasks.find((task) => task.id === id),
-    [id, allTasks]
+    () => allProjectTasks.find((task) => task.id === id),
+    [id, allProjectTasks]
   );
 
   const { project } = useParams();
@@ -56,7 +55,7 @@ const ModalContainer = ({
   );
 
   if (!task) {
-    return <Modal active={active} saveTask={saveTask} onClose={onClose} />;
+    return <Modal active={active} saveTask={saveTask} onClose={onClose} allProjectTasks={allProjectTasks}/>;
   }
 
   return (
@@ -66,6 +65,7 @@ const ModalContainer = ({
       editTask={changeTask}
       removeTask={removeTask}
       onClose={onClose}
+      allProjectTasks={allProjectTasks}
     />
   );
 };
