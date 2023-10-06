@@ -1,4 +1,5 @@
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import Modal from "../modal/Modal";
 import { useAppSelector } from "../../hooks";
@@ -21,24 +22,38 @@ const ModalContainer = ({
 }: IModalContainer) => {
   const dispatch = useDispatch();
 
-  const changeTask = useCallback((task: TForm, id: string) => {
-    dispatch(editTask(task, id));
-    setActive(false);
-  }, [dispatch, setActive]);
+  const changeTask = useCallback(
+    (task: TForm, id: string) => {
+      dispatch(editTask(task, id));
+      setActive(false);
+    },
+    [dispatch, setActive]
+  );
 
-  const removeTask = useCallback((id: string) => {
-    dispatch(deleteTask(id));
-    setActive(false);
-  }, [dispatch, setActive]);
+  const removeTask = useCallback(
+    (id: string) => {
+      dispatch(deleteTask(id));
+      setActive(false);
+    },
+    [dispatch, setActive]
+  );
 
   const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
 
-  const task = useMemo(() => allTasks.find((task) => task.id === id), [id, allTasks]);
+  const task = useMemo(
+    () => allTasks.find((task) => task.id === id),
+    [id, allTasks]
+  );
 
-  const saveTask = useCallback((task: TForm) => {
-    dispatch(addTask(task));
-    setActive(false);
-  }, [dispatch, setActive]);
+  const { project } = useParams();
+
+  const saveTask = useCallback(
+    (task: TForm) => {
+      project && dispatch(addTask(task, project));
+      setActive(false);
+    },
+    [dispatch, setActive, project]
+  );
 
   if (!task) {
     return <Modal active={active} saveTask={saveTask} onClose={onClose} />;

@@ -7,8 +7,13 @@ const MainPage = () => {
       <h1>My projects:</h1>
       <ul className={css.projects_list}>
         <li>
-          <Link to="/spa-to-do/my-first-project" className={css.project}>
+          <Link to="/spa-to-do/project-one" className={css.project}>
             My first project
+          </Link>
+        </li>
+        <li>
+          <Link to="/spa-to-do/project-two" className={css.project}>
+            My second project
           </Link>
         </li>
       </ul>

@@ -33,8 +33,18 @@ const initialState: {
       status: Status.Done,
       project: "project-one",
     },
+    {
+      id: "123",
+      summary: "Задача второго проекта",
+      priority: Priority.Low,
+      description: "Второй проект, не первый)",
+      startDate: "10/04/2023",
+      endDate: "10/06/2023",
+      status: Status.Queue,
+      project: "project-two",
+    },
   ],
-  allProjects: ["project-one"],
+  allProjects: ["project-one", "project-two"],
 };
 
 export const tasksReducer = (
@@ -42,13 +52,14 @@ export const tasksReducer = (
   action:
     | {
         type: "ADD_TASK";
-        payload: TForm;
+        payload: {
+          formData: TForm,
+          formProject: string
+        };
       }
     | {
         type: "DELETE_TASK";
-        payload: {
-          taskId: string;
-        };
+        payload: string;
       }
     | {
         type: "EDIT_TASK";
@@ -58,10 +69,11 @@ export const tasksReducer = (
   switch (action.type) {
     case ADD_TASK: {
       const id = window.crypto.randomUUID();
+      const project = action.payload.formProject;
       const newTask = {
-        ...action.payload,
+        ...action.payload.formData,
         id: id,
-        project: state.allProjects[0],
+        project: project,
       };
       const updatedAllTasks = [...state.allTasks, newTask];
       return {
@@ -70,7 +82,7 @@ export const tasksReducer = (
       };
     }
     case DELETE_TASK: {
-      const taskId = action.payload.taskId;
+      const taskId = action.payload;
       const updatedAllTasks = state.allTasks.filter(
         (task) => task.id !== taskId
       );

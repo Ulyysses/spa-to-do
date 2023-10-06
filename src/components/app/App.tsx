@@ -8,7 +8,7 @@ const App = () => {
     <main className="container">
       <Routes>
         <Route path="/spa-to-do" element={<MainPage />} />
-        <Route path="/spa-to-do/my-first-project" element={<Project />} />
+        <Route path="/spa-to-do/:project" element={<Project />} />
       </Routes>
     </main>
   );

@@ -1,4 +1,5 @@
 import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { useAppSelector } from "../../hooks";
 import css from "./index.module.scss";
@@ -14,13 +15,17 @@ const Project = () => {
 
   const [searchId, setSearchId] = useState("");
 
+  const { project } = useParams();
+
   const allTasks = useAppSelector((state) => state.tasksReducer.allTasks);
+
+  const allFilteredTasks = allTasks.filter((task) => project && task.project.includes(project))
 
   const handleInputSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchId(event.target.value);
   };
 
-  const filteredTasks = allTasks.filter((task) => task.id.includes(searchId));
+  const filteredTasks = allFilteredTasks.filter((task) => task.id.includes(searchId));
 
   const onClose = useCallback(() => {
     setCurrentModalId("");
